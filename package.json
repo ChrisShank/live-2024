@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lit/reactive-element": "^2.0.4",
+    "@lume/custom-attributes": "^0.2.3",
     "perfect-arrows": "^0.3.7"
   },
   "devDependencies": {

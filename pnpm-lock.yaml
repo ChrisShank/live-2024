@@ -8,6 +8,9 @@ dependencies:
   '@lit/reactive-element':
     specifier: ^2.0.4
     version: 2.0.4
+  '@lume/custom-attributes':
+    specifier: ^0.2.3
+    version: 0.2.3
   perfect-arrows:
     specifier: ^0.3.7
     version: 0.3.7
@@ -251,6 +254,12 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.2.0
     dev: false
 
+  /@lume/custom-attributes@0.2.3:
+    resolution: {integrity: sha512-p40byMnqwBokWhiPaYWQb+HSDJy12NA+tiK0UyOtqJeuLBMWZZcoxbhyDPgMq1lF/CZ67EWnGT4tuu1zIX1GMg==}
+    dependencies:
+      lowclass: 7.0.1
+    dev: false
+
   /@rollup/rollup-android-arm-eabi@4.18.0:
     resolution: {integrity: sha512-Tya6xypR10giZV1XzxmH5wr25VcZSncG0pZIjfePT0OVBvqNEurzValetGNarVrGiq66EBVAFn15iYX4w6FKgQ==}
     cpu: [arm]
@@ -432,6 +441,10 @@ packages:
     resolution: {integrity: sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==}
     engines: {node: '>=12.0.0'}
     dev: true
+
+  /lowclass@7.0.1:
+    resolution: {integrity: sha512-MUCYry/VsWP3jfShf0TUyQ9tnmo6qsNUGnxbRo02GHtnyz1pq12ZlI7ep+H1s+FqpoDgA/TVrGqSScrvYhaWAQ==}
+    dev: false
 
   /marked-highlight@2.1.1(marked@12.0.2):
     resolution: {integrity: sha512-ktdqwtBne8rim5mb+vvZ9FzElGFb+CHCgkx/g6DSzTjaSrVnxsJdSzB5YgCkknFrcOW+viocM1lGyIjC0oa3fg==}
