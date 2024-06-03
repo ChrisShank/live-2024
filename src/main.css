@@ -1,0 +1,37 @@
+html {
+  font-family: 'Inter', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: 'slnt' 0;
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+}
+
+header,
+main,
+footer {
+  padding: 1rem;
+}
+
+horizontal-spacer {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+}
+
+[movable] {
+  position: absolute;
+}
+
+square-node {
+  display: block;
+  width: 50px;
+  aspect-ratio: 1;
+  border: 2px solid black;
+}
