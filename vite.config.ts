@@ -15,14 +15,20 @@ const marked = new Marked(
   })
 );
 
+const markdownPath = resolve(__dirname, './src/index.md');
+
 const markdown: Plugin = {
   name: 'markdown',
-  transformIndexHtml: async (html: string) => {
+  // Reload the server when the markdown file changes since it's not part of the build
+  load() {
+    this.addWatchFile(markdownPath);
+  },
+  async transformIndexHtml(html: string) {
     const styles = readFileSync(
       resolve(__dirname, './node_modules/highlight.js/styles/github.css'),
       'utf8'
     );
-    const markdown = readFileSync(resolve(__dirname, './index.md'), 'utf8');
+    const markdown = readFileSync(markdownPath, 'utf8');
     const content = await marked.parse(markdown);
 
     return html.replace('{{ STYLES }}', styles).replace('{{ MARKDOWN }}', content);
