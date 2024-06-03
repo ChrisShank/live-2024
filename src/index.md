@@ -22,5 +22,3 @@ The first set of primitives necessary to build a live programming environment ar
 ```html
 <div resizable></div>
 ```
-
-helllo
