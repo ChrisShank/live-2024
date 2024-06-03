@@ -1,9 +1,17 @@
 import { defineConfig, Plugin } from 'vite';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { Marked } from 'marked';
+import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
+
+// if we are rendering HTML in a markdown file don't wrap it in a <p>
+Renderer.prototype.paragraph = (text) => {
+  if (text.startsWith('<')) {
+    return text + '\n';
+  }
+  return '<p>' + text + '</p>';
+};
 
 const marked = new Marked(
   markedHighlight({
