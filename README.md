@@ -1,4 +1,4 @@
-# The DOM as a substrate for live computation - LIVE 2024 submission
+# The DOM as a substrate for live programming - LIVE 2024 submission
 
 ## Abstract
 

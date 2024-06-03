@@ -7,7 +7,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <title>The DOM as a substrate for live computation</title>
+    <title>The DOM as a substrate for live programming</title>
     <style>
       html {
         font-family: 'Inter', sans-serif;
@@ -30,23 +30,18 @@
         padding: 1rem;
       }
     </style>
+    <!-- Injected highlighting styles -->
+    <style>
+      {{ STYLES }}
+    </style>
   </head>
   <body>
     <header>
-      <h1>The DOM as a substrate for live computation</h1>
+      <h1>The DOM as a substrate for live programming</h1>
     </header>
 
-    <main>
-      <section>
-        <h2>Abstract</h2>
-        <p>...</p>
-      </section>
-
-      <section>
-        <h2>Introduction</h2>
-        <p>...</p>
-      </section>
-    </main>
+    <!-- Injected markdown content -->
+    <main>{{ MARKDOWN }}</main>
 
     <footer></footer>
     <script type="module" src="/src/main.ts"></script>
