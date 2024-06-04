@@ -123,7 +123,7 @@ export class VisualObserver {
     const root = this.#root;
     const floor = Math.floor;
     const x = left + root.scrollLeft;
-    const y = top + root.scrollLeft;
+    const y = top + root.scrollTop;
 
     // `${insetTop}px ${insetRight}px ${insetBottom}px ${insetLeft}px`;
     const rootMargin = `${-floor(y)}px ${-floor(this.#rootRect.width - (x + width))}px ${-floor(
