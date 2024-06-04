@@ -31,32 +31,54 @@ The first set of primitives necessary to build a live programming environment ar
 <input movable />
 <horizontal-spacer style="height: 1rem;"></horizontal-spacer>
 
+## Shapes
+
 We can make all types of shapes in the DOM using CSS `clip-path` and `mask`, no SVG necessary in many cases! See [this](https://www.smashingmagazine.com/2024/05/modern-guide-making-css-shapes/#cutting-corners) for more info.
 
-````html
-<triangle-node movable></triangle-node>
-<square-node movable style="left: 150px;"></square-node>
-<hexagon-node movable style="left: 300px;"></hexagon-node>```
-````
+```html
+<triangle-node movable style="left: 50px;"></triangle-node>
+<square-node movable style="left: 200px;"></square-node>
+<hexagon-node movable style="left: 350px;"></hexagon-node>
+```
 
-<triangle-node movable></triangle-node>
-<square-node movable style="left: 150px;"></square-node>
-<hexagon-node movable style="left: 300px;"></hexagon-node>
+<triangle-node movable style="left: 50px;"></triangle-node>
+<square-node movable style="left: 200px;"></square-node>
+<hexagon-node movable style="left: 350px;"></hexagon-node>
 <horizontal-spacer style="height: 6rem"></horizontal-spacer>
+
+## Arrows
 
 Next we need to be able to define connection between things. The browser has no way to do this, so lets define a custom element that can render an arrow between two elements. We will use the `perfect-arrow` library by Steve Ruiz to layout the arrow.
 
 ```html
 <square-node id="square1" movable></square-node>
-<square-node id="square2" movable style="left: 250px;"></square-node>
+<square-node id="square2" movable></square-node>
 <perfect-arrow source="#square1" target="#square2"></perfect-arrow>
 ```
 
-<square-node id="square1" movable></square-node>
-<square-node id="square2" movable style="left: 250px;"></square-node>
-<perfect-arrow source="#square1" target="#square2"></perfect-arrow>
-<horizontal-spacer style="height: rem"></horizontal-spacer>
+<square-node id="square1-1" movable style="left: 50px;"></square-node>
+<square-node id="square1-2" movable style="left: 300px;"></square-node>
+<perfect-arrow source="#square1-1" target="#square1-2"></perfect-arrow>
+<horizontal-spacer style="height: 6rem"></horizontal-spacer>
 
-In HTML we've described connection between two elements using CSS selectors in the `source` and `target` attributes. A arrow is sticky, try dragging the boxes around. Arrow's can be declaratively attached to _any_ DOM element.
+In HTML we've described connection between two elements using CSS selectors in the `source` and `target` attributes. A arrow is sticky, try dragging the boxes around. Arrow's can be declaratively attached to _any_ DOM element and any kind of movement or resizing will cause the arrow to rerender. CSS layout, scrolling, and programmatic updates included. In most live programming environments and spatial canvases an arrow's "stickiness" results from the tight coupling between a node's `resize` and `drag` events and the logic to rerender the arrow. A consequence of this is that only certain parts of the environment are blessed with stickiness and it only works in a canvas, not in any given website.
 
-It's subtle, but this is an important difference between how connection usually works in live programming environments and spatial canvases and how it is implemented here. Usually an arrow's "stickiness" comes from it being tightly coupled to the node's resize and drag events. By defining connection
+Now that we can define visual connection between elements lets explore ways we can directly manipulate connection. We can add a `retargetable` attribute to enable this
+
+```html
+<square-node id="square2-1" movable></square-node>
+<square-node id="square2-2" movable></square-node>
+<square-node id="square2-3" movable></square-node>
+<retargetable-arrow
+  source="#square2-1"
+  target="#square2-2"
+  valid-source="square-node"
+  valid-target="square-node"
+></retargetable-arrow>
+```
+
+<square-node id="square2-1" movable style="left: 50px;"></square-node>
+<square-node id="square2-2" movable style="left: 300px;"></square-node>
+<square-node id="square2-3" movable style="left: 550px;"></square-node>
+<retargetable-arrow source="#square2-1" target="#square2-2" valid-source="square-node" valid-target="square-node"></retargetable-arrow>
+<horizontal-spacer style="height: 10rem"></horizontal-spacer>

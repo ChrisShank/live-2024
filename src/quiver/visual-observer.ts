@@ -22,7 +22,15 @@ export class VisualObserverManager {
       this.#vo.observe(target);
       this.#elementMap.set(target, (callbacks = new Set()));
     } else {
-      callback({ target, contentRect: target.getBoundingClientRect(), isAppearing: true });
+      const { x, y, height, width } = target.getBoundingClientRect();
+      const { scrollLeft, scrollTop } = document.documentElement;
+      const contentRect = DOMRectReadOnly.fromRect({
+        x: x + scrollLeft,
+        y: y + scrollTop,
+        height,
+        width,
+      });
+      callback({ target, contentRect, isAppearing: true });
     }
 
     callbacks.add(callback);

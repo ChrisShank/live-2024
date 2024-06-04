@@ -19,6 +19,11 @@ body {
   --node-width: 100px;
 }
 
+main {
+  max-width: 70ch;
+  margin: auto;
+}
+
 horizontal-spacer {
   display: block;
   margin-block-start: 1em;
@@ -84,7 +89,8 @@ hexagon-node {
   }
 }
 
-perfect-arrow {
+perfect-arrow,
+retargetable-arrow {
   display: block;
   position: absolute;
   top: 0;
@@ -92,4 +98,5 @@ perfect-arrow {
   bottom: 0;
   left: 0;
   pointer-events: none;
+  z-index: 2;
 }

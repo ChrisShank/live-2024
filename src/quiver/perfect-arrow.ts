@@ -97,7 +97,7 @@ export class PerfectArrow extends AbstractArrow {
     this.#svg.style.width = '100%';
     this.#svg.style.pointerEvents = 'none';
 
-    this.#circle.setAttribute('r', '4');
+    this.#circle.setAttribute('r', '5');
     this.#circle.style.pointerEvents = 'all';
 
     this.#path.setAttribute('fill', 'none');
