@@ -82,3 +82,23 @@ Now that we can define visual connection between elements lets explore ways we c
 <square-node id="square2-3" movable style="left: 550px;"></square-node>
 <retargetable-arrow source="#square2-1" target="#square2-2" valid-source="square-node" valid-target="square-node"></retargetable-arrow>
 <horizontal-spacer style="height: 10rem"></horizontal-spacer>
+
+## Propagator Network
+
+Now that we can define connection between HTML elements, let's use that to preform some meaningful computation with it. We can start by implementing dataflow via a propagator network. We need to define a propagator element that takes a set of inputs and computes a output. We also need to augment our arrow with some additional behavior that facilitates the data flow between values and propagators.
+
+<input name="celsius" type="number" value="0" movable style="left: 50px;" />
+<input name="fahrenheit" type="number" value="32" movable style="left: 550px;" />
+
+<prop-agator name="c-to-f" expression="(c * 9/5) + 32" movable style="left: 300px;"></prop-agator>
+
+<!-- <prop-agator name="f-to-c" expression="(f - 32) * 5/9" movable style="left: 750px;"></prop-agator> -->
+
+<propagator-arrow source="input[name='celsius']" target="prop-agator[name='c-to-f']" name="c"></propagator-arrow>
+<propagator-arrow source="prop-agator[name='c-to-f']" target="input[name='fahrenheit']"></propagator-arrow>
+
+<propagator-arrow source="input[name='fahrenheit']" target="prop-agator[name='f-to-c']" name="f"></propagator-arrow>
+
+<!-- <propagator-arrow source="prop-agator[name='f-to-c']" target="input[name='celsius']"></propagator-arrow> -->
+
+<horizontal-spacer style="height: 10rem;"></horizontal-spacer>

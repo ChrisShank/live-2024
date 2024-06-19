@@ -90,7 +90,8 @@ hexagon-node {
 }
 
 perfect-arrow,
-retargetable-arrow {
+retargetable-arrow,
+propagator-arrow {
   display: block;
   position: absolute;
   top: 0;
@@ -99,4 +100,39 @@ retargetable-arrow {
   left: 0;
   pointer-events: none;
   z-index: 2;
+}
+
+propagator-arrow[name]::after {
+  content: attr(name);
+  display: inline-block;
+  position: absolute;
+  top: var(--cy);
+  left: var(--cx);
+  /* transform: rotate(var(--ac)) translateX(-50%); */
+  background: white;
+  padding: 0.1rem;
+}
+
+prop-agator {
+  display: block;
+  border: 2px solid black;
+  font-family: monospace;
+  width: 150px;
+  height: 2rem;
+  border-radius: 5px;
+
+  &::before {
+    content: attr(expression);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+}
+
+input {
+  width: 100px;
 }

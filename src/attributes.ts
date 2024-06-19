@@ -12,11 +12,26 @@ export class CustomAttribute implements ICustomAttribute {
   ownerElement!: Element;
 }
 
+export interface Vertex {
+  x: number;
+  y: number;
+}
+
+export class MoveEvent extends CustomEvent<Vertex> {
+  static eventType = 'move';
+
+  constructor(vertex: Vertex) {
+    super(MoveEvent.eventType, { detail: vertex, bubbles: true, cancelable: true });
+  }
+}
+
 export class Moveable extends CustomAttribute {
   static attributeName = 'movable';
 
-  left = 0;
-  top = 0;
+  ownerElement!: HTMLElement;
+
+  #x = 0;
+  #y = 0;
 
   connectedCallback() {
     this.ownerElement.addEventListener('pointerdown', this);
@@ -37,29 +52,37 @@ export class Moveable extends CustomAttribute {
       case 'pointerdown': {
         if (event.button !== 0 || event.ctrlKey) return;
 
-        this.left = (this.ownerElement as HTMLElement).offsetLeft;
-        this.top = (this.ownerElement as HTMLElement).offsetTop;
+        this.#x = this.ownerElement.offsetLeft ?? 0;
+        this.#y = this.ownerElement.offsetTop ?? 0;
 
-        (this.ownerElement as HTMLElement).style.userSelect = 'none';
-        (this.ownerElement as HTMLElement).style.cursor = 'grabbing';
+        this.ownerElement.style.userSelect = 'none';
+        this.ownerElement.style.cursor = 'grabbing';
 
         this.ownerElement.setPointerCapture(event.pointerId);
         this.ownerElement.addEventListener('pointermove', this);
         return;
       }
       case 'pointermove': {
-        this.left += event.movementX;
-        this.top += event.movementY;
-        (this.ownerElement as HTMLElement).style.left = `${this.left}px`;
-        (this.ownerElement as HTMLElement).style.top = `${this.top}px`;
+        this.#x += event.movementX;
+        this.#y += event.movementY;
+
+        const notCancelled = this.ownerElement.dispatchEvent(
+          new MoveEvent({ x: this.#x, y: this.#y })
+        );
+
+        if (notCancelled) {
+          this.ownerElement.style.left = `${this.#x}px`;
+          this.ownerElement.style.top = `${this.#y}px`;
+        }
+
         return;
       }
       case 'lostpointercapture': {
-        this.left = 0;
-        this.top = 0;
+        this.#x = 0;
+        this.#y = 0;
 
-        (this.ownerElement as HTMLElement).style.userSelect = '';
-        (this.ownerElement as HTMLElement).style.cursor = '';
+        this.ownerElement.style.userSelect = '';
+        this.ownerElement.style.cursor = '';
 
         this.ownerElement.removeEventListener('pointermove', this);
         return;
