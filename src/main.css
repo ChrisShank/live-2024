@@ -9,6 +9,7 @@ html {
   font-style: normal;
   font-variation-settings: 'slnt' 0;
   height: 100%;
+  /* font-display: swap; */
 }
 
 body {
@@ -35,58 +36,11 @@ horizontal-spacer {
   position: absolute;
 }
 
-triangle-node,
-square-node,
-hexagon-node {
+square-node {
   display: block;
   width: var(--node-width);
-  background: black;
   aspect-ratio: 1;
-}
-
-triangle-node {
-  clip-path: polygon(
-    100% 100%,
-    0% 100%,
-    50% 0%,
-    100% 100%,
-    calc(50% - 0px) calc(0% - -10px),
-    calc(0% - -8.66px) calc(100% - 5px),
-    calc(100% - 8.66px) calc(100% - 5px),
-    calc(50% - 0px) calc(0% - -10px)
-  );
-
-  &[filled] {
-    clip-path: polygon(93.3% 75%, 6.7% 75%, 50% 0%);
-  }
-}
-
-square-node:not([filled]) {
-  background: none;
   border: 5px solid black;
-}
-
-hexagon-node {
-  clip-path: polygon(
-    100% 50%,
-    75% 93.3%,
-    25% 93.3%,
-    0% 50%,
-    25% 6.7%,
-    75% 6.7%,
-    100% 50%,
-    calc(75% - 2.5px) calc(6.7% - -4.33px),
-    calc(25% - -2.5px) calc(6.7% - -4.33px),
-    calc(0% - -5px) calc(50% - 0px),
-    calc(25% - -2.5px) calc(93.3% - 4.33px),
-    calc(75% - 2.5px) calc(93.3% - 4.33px),
-    calc(100% - 5px) calc(50% - 0px),
-    calc(75% - 2.5px) calc(6.7% - -4.33px)
-  );
-
-  &[filled] {
-    clip-path: polygon(100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%, 25% 6.7%, 75% 6.7%);
-  }
 }
 
 perfect-arrow,

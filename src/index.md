@@ -6,86 +6,65 @@
 
 ## Introduction
 
-Live programming environments are typically architected as walled gardens, a standalone application or website where computation and data is trapped without escape. This leads to challenges around extending and composing such systems, and reusing primitives to build new ones. Where is all of the "heterogeneous live programming" ([PANE, Josh Horowitz](http://pane.s3-website-us-west-2.amazonaws.com/))? Here we demonstrate how the DOM can be used as a substrate for
+Live programming environments are typically architected as walled gardens, a standalone application or website where computation and data is trapped, without escape. While these explorations have demonstrated a multitude of approaches and domains for live programming, there are unaddressed challenges around extending and composing such systems, and reusing primitives to build new ones. In other words, where is all of the ["heterogeneous live programming"](http://pane.s3-website-us-west-2.amazonaws.com/)? In [Engraft](https://engraft.dev/engraft-uist-2023.pdf), Joshua Horowitz and Jeffrey Heer demonstrated how to compose live and rich tools on the web, but much is left to be desired with composing "tools and environments in the outside world" or even the notion that an outside world exists, implying that
 
-Here we use custom elements to handle 3 distinct tasks:
+In this essay, we demonstrate how the DOM can be used as a substrate for building and composing live programming systems on any website. We embrace the DOM and show that we only need to extend it with a few primitives in order to achieve this goal.
 
-1. Render itself to the screen
-2. Update itself and it's relationships to other element
-3. Participate in the live execution
+## Connection
 
-## Canvas primitives
-
-The first set of primitives necessary to build a live programming environment are those that give DOM elements the capabilities found in a spatial canvas. The ability for an element to be moved, resized, rotated, etc. We can enable this for any type of DOM element through custom attributes.
+The DOM lacks a way to visually describe connection between elements. There are far and few of examples where symbolic connection is used in the DOM, including hash links and form inputs/labels. These connections are largely invisible to the user, except when implied by visual design. So let's extend the DOM by defining a [custom element](#) that can render an arrow between two elements. We will use the [`perfect-arrows` library](#) by Steve Ruiz to layout the arrow. Let's call our new element `perfect-arrow`:
 
 ```html
-<input />
+<square-node id="square1-1"></square-node>
+<square-node id="square1-2"></square-node>
+<perfect-arrow source="#square1-1" target="#square1-2"></perfect-arrow>
 ```
 
-<input />
-
-```html
-<input moveable />
-```
-
-<input movable />
-<horizontal-spacer style="height: 1rem;"></horizontal-spacer>
-
-## Shapes
-
-We can make all types of shapes in the DOM using CSS `clip-path` and `mask`, no SVG necessary in many cases! See [this](https://www.smashingmagazine.com/2024/05/modern-guide-making-css-shapes/#cutting-corners) for more info.
-
-```html
-<triangle-node movable style="left: 50px;"></triangle-node>
-<square-node movable style="left: 200px;"></square-node>
-<hexagon-node movable style="left: 350px;"></hexagon-node>
-```
-
-<triangle-node movable style="left: 50px;"></triangle-node>
-<square-node movable style="left: 200px;"></square-node>
-<hexagon-node movable style="left: 350px;"></hexagon-node>
-<horizontal-spacer style="height: 6rem"></horizontal-spacer>
-
-## Arrows
-
-Next we need to be able to define connection between things. The browser has no way to do this, so lets define a custom element that can render an arrow between two elements. We will use the `perfect-arrow` library by Steve Ruiz to layout the arrow.
-
-```html
-<square-node id="square1" movable></square-node>
-<square-node id="square2" movable></square-node>
-<perfect-arrow source="#square1" target="#square2"></perfect-arrow>
-```
-
-<square-node id="square1-1" movable style="left: 50px;"></square-node>
-<square-node id="square1-2" movable style="left: 300px;"></square-node>
+<square-node id="square1-1" style="position: absolute; left: 50px;"></square-node>
+<square-node id="square1-2" style="position: absolute; left: 300px;"></square-node>
 <perfect-arrow source="#square1-1" target="#square1-2"></perfect-arrow>
 <horizontal-spacer style="height: 6rem"></horizontal-spacer>
 
-In HTML we've described connection between two elements using CSS selectors in the `source` and `target` attributes. A arrow is sticky, try dragging the boxes around. Arrow's can be declaratively attached to _any_ DOM element and any kind of movement or resizing will cause the arrow to rerender. CSS layout, scrolling, and programmatic updates included. In most live programming environments and spatial canvases an arrow's "stickiness" results from the tight coupling between a node's `resize` and `drag` events and the logic to rerender the arrow. A consequence of this is that only certain parts of the environment are blessed with stickiness and it only works in a canvas, not in any given website.
-
-Now that we can define visual connection between elements lets explore ways we can directly manipulate connection. We can add a `retargetable` attribute to enable this
+We've declaratively described connection between two elements in HTML using CSS selectors in the `source` and `target` attributes of our new element and it renders an arrow between those two elements. This is quite trivial to implement, the non-trivial part is being able to display connection between elements that can arbitrarily move and resize. Here we use a proposed web standard called [custom attributes](#) to make any DOM element movable by clicking an dragging it.
 
 ```html
 <square-node id="square2-1" movable></square-node>
 <square-node id="square2-2" movable></square-node>
-<square-node id="square2-3" movable></square-node>
+<perfect-arrow source="#square2-1" target="#square2-2"></perfect-arrow>
+```
+
+<square-node id="square2-1" movable style="left: 50px;"></square-node>
+<square-node id="square2-2" movable style="left: 300px;"></square-node>
+<perfect-arrow source="#square2-1" target="#square2-2"></perfect-arrow>
+<horizontal-spacer style="height: 6rem"></horizontal-spacer>
+
+A arrow is sticky, try dragging the boxes around. Arrow's can be declaratively attached to _any_ DOM element and any kind of movement or resizing will cause the arrow to rerender; responsive CSS layout, scrolling, and programmatic style changes. this is important because our custom element works standalone, arrows don't have to be orchestrated by a spatial canvas in order to work. They can be dropped into any website and used via a single script import that registers the custom element.
+
+Now that we can define visual connection between elements let's explore ways we can directly manipulate connection. We can extend our previous custom element to update the `source` and `target` as they are dragged onto other elements.
+
+```html
+<square-node id="square3-1" movable></square-node>
+<square-node id="square3-2" movable></square-node>
+<square-node id="square3-3" movable></square-node>
 <retargetable-arrow
-  source="#square2-1"
-  target="#square2-2"
+  source="#square3-1"
+  target="#square3-2"
   valid-source="square-node"
   valid-target="square-node"
 ></retargetable-arrow>
 ```
 
-<square-node id="square2-1" movable style="left: 50px;"></square-node>
-<square-node id="square2-2" movable style="left: 300px;"></square-node>
-<square-node id="square2-3" movable style="left: 550px;"></square-node>
-<retargetable-arrow source="#square2-1" target="#square2-2" valid-source="square-node" valid-target="square-node"></retargetable-arrow>
+<square-node id="square3-1" movable style="left: 50px;"></square-node>
+<square-node id="square3-2" movable style="left: 300px;"></square-node>
+<square-node id="square3-3" movable style="left: 550px;"></square-node>
+<retargetable-arrow source="#square3-1" target="#square3-2" valid-source="square-node" valid-target="square-node"></retargetable-arrow>
 <horizontal-spacer style="height: 10rem"></horizontal-spacer>
 
-## Propagator Network
+## Live computation
 
-Now that we can define connection between HTML elements, let's use that to preform some meaningful computation with it. We can start by implementing dataflow via a propagator network. We need to define a propagator element that takes a set of inputs and computes a output. We also need to augment our arrow with some additional behavior that facilitates the data flow between values and propagators.
+### Propagator Network
+
+Now that we can define connection between HTML elements, let's use that to preform some meaningful computation with it. We can start by implementing dataflow via a [propagator network](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=5dab26b9dac4e6a6ba5475c4aa304e12aa931f2d). We need to define a propagator element that takes a set of inputs and computes a output. We also need to augment our arrow with some additional behavior that facilitates the data flow between values and propagators.
 
 <input name="celsius" type="number" value="0" movable style="left: 50px;" />
 <input name="fahrenheit" type="number" value="32" movable style="left: 550px;" />
@@ -97,8 +76,24 @@ Now that we can define connection between HTML elements, let's use that to prefo
 <propagator-arrow source="input[name='celsius']" target="prop-agator[name='c-to-f']" name="c"></propagator-arrow>
 <propagator-arrow source="prop-agator[name='c-to-f']" target="input[name='fahrenheit']"></propagator-arrow>
 
-<propagator-arrow source="input[name='fahrenheit']" target="prop-agator[name='f-to-c']" name="f"></propagator-arrow>
+<!-- <propagator-arrow source="input[name='fahrenheit']" target="prop-agator[name='f-to-c']" name="f"></propagator-arrow> -->
 
 <!-- <propagator-arrow source="prop-agator[name='f-to-c']" target="input[name='celsius']"></propagator-arrow> -->
 
 <horizontal-spacer style="height: 10rem;"></horizontal-spacer>
+
+### State Machine
+
+_TODO_
+
+## Composability
+
+_Show how to compose a propagator network and state machine can be composed together via our very simple DOM protocol._
+
+## Metaprogramming
+
+_Since everything is a DOM element we can perform computation on the live notations itself. Example include dynamically targeting arrows, or updating other attributes in a notation._
+
+## Conclusion
+
+_Things to explore include end-user programming (maybe via a chrome extension), how other rich notations compose together, and how to reflect changes back into source code._
